@@ -1,15 +1,15 @@
-import { Epic, ofType } from 'redux-observable';
-import { mapTo } from 'rxjs/operators';
-import { getType, Action } from 'typesafe-actions';
+import { Epic } from 'redux-observable';
+import { filter, mapTo } from 'rxjs/operators';
+import { Action, isActionOf } from 'typesafe-actions';
 import { RootState } from '../types';
 import * as actions from './actions';
 
-const dummyEpic: Epic<Action, Action, RootState> =
-    (action$, _store) =>
-        action$.pipe(
-            ofType(getType(actions.TempStart)),
-            mapTo(actions.TempStartSuccess()),
-        );
+export const dummyEpic: Epic<Action, Action, RootState, {}> = (action$, store) =>
+  action$.pipe(
+    filter(isActionOf(actions.TempStart)),
+    mapTo(actions.TempStartSuccess()),
+  );
 
-const epics = [dummyEpic];
-export default epics;
+const middlewares = [dummyEpic];
+
+export default middlewares;
